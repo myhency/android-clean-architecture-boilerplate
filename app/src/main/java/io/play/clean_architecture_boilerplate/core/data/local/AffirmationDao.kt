@@ -10,7 +10,7 @@ import io.play.clean_architecture_boilerplate.core.data.local.entities.Affirmati
 
 @Dao
 interface AffirmationDao {
-    @Query("select * from AffirmationEntity")
+    @Query("select * from AffirmationEntity order by createdAt desc")
     suspend fun getAll(): List<AffirmationEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -5,7 +5,10 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class AffirmationEntity(
-    @PrimaryKey val id: String,
     val statement: String,
-    val imageUrl: String
-)
+    val todayFeeling: String,
+    val createdAt: String,
+    val imageUrl: String,
+) {
+    @PrimaryKey(autoGenerate = true) var id: Int = 0
+}

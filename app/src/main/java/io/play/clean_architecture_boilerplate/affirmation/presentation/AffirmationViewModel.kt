@@ -1,6 +1,7 @@
 package io.play.clean_architecture_boilerplate.affirmation.presentation
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -19,6 +20,9 @@ class AffirmationViewModel @Inject constructor(
 ) : ViewModel() {
     var affirmationList by mutableStateOf<List<AffirmationEntity>>(emptyList())
         private set
+    var isNewAffirmationDialogShown by mutableStateOf(false)
+        private set
+
 
     init {
         viewModelScope.launch {
@@ -30,20 +34,29 @@ class AffirmationViewModel @Inject constructor(
 //            )
         }
     }
-}
 
-data class Affirmation(
-    val statement: String,
-    val id: String,
-    @DrawableRes val imageResourceId: Int
-)
+    fun onNewAffirmationClick() {
+        isNewAffirmationDialogShown = true
+    }
 
-fun affirmationList(): List<Affirmation> {
-    return listOf(
-        Affirmation("be good", "1", R.drawable.image1),
-        Affirmation("be good", "2", R.drawable.image1),
-        Affirmation("be good", "3", R.drawable.image1),
-        Affirmation("be good", "4", R.drawable.image1),
-        Affirmation("be good", "5", R.drawable.image1),
-    )
+    fun onNewAffirmationClose() {
+        isNewAffirmationDialogShown = false
+    }
+
+    fun onDismissButtonClicked(
+        affirmationStatement: String,
+        todayFeeling: String,
+        date: String,
+        imageUrl: String
+    ) {
+        onNewAffirmationClose()
+        viewModelScope.launch {
+            affirmationDao.insert(
+                AffirmationEntity(
+                     affirmationStatement, todayFeeling, date, imageUrl
+                )
+            )
+            affirmationList = affirmationDao.getAll()
+        }
+    }
 }
