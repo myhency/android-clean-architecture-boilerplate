@@ -1,6 +1,7 @@
 package io.play.clean_architecture_boilerplate.affirmation.presentation
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,11 +28,6 @@ class AffirmationViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             affirmationList = affirmationDao.getAll()
-//            affirmationDao.insert(
-//                AffirmationEntity(
-//                    "1", "I am strong.", "https://darebee.com/images/fitness/muscles-stronger.jpg"
-//                )
-//            )
         }
     }
 
@@ -47,7 +43,8 @@ class AffirmationViewModel @Inject constructor(
         affirmationStatement: String,
         todayFeeling: String,
         date: String,
-        imageUrl: String
+        imageUrl: String,
+        moveScrollToTop: () -> Unit
     ) {
         onNewAffirmationClose()
         viewModelScope.launch {
@@ -57,6 +54,7 @@ class AffirmationViewModel @Inject constructor(
                 )
             )
             affirmationList = affirmationDao.getAll()
+            moveScrollToTop()
         }
     }
 }

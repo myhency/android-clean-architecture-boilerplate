@@ -62,7 +62,6 @@ fun AffirmationScreen(
             ) {
                 AffirmationCard(it, onAffirmationCardClicked)
             }
-            coroutineScope.launch { scrollState.animateScrollToItem(0) }
         }
     }
 
@@ -74,7 +73,9 @@ fun AffirmationScreen(
                     todayFeeling,
                     date,
                     imageUrl
-                )
+                ) {
+                    coroutineScope.launch { scrollState.animateScrollToItem(0) }
+                }
             },
             onClose = {
                 affirmationViewModel.onNewAffirmationClose()
